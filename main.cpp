@@ -47,9 +47,11 @@ void readQuery(int freq[26])
         freq[i] = 0;
 
     string line;
-    cin.ignore(); // consume newline
 
-    getline(cin, line);
+    // Skip empty line left after previous >> extraction
+    while (getline(cin, line)) {
+        if (!line.empty()) break;
+    }
 
     string token;
     stringstream ss(line);
