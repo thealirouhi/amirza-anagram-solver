@@ -1,0 +1,33 @@
+# Compiled output
+*.out
+*.o
+*.obj
+*.exe
+
+# Build directories
+build/
+cmake-build-*/
+bin/
+dist/
+
+# Debug files
+*.dSYM/
+*.pdb
+
+# IDE files
+.vscode/
+.idea/
+*.code-workspace
+
+# macOS system files
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*~
