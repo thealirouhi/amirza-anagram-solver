@@ -33,8 +33,10 @@ void loadDictionary(map<string, bool> &dictionary, int n)
     }
 }
 
-void readQuery(int freq[26]) {
-    for (int i = 0; i < 26; i++) freq[i] = 0;
+void readQuery(int freq[26])
+{
+    for (int i = 0; i < 26; i++)
+        freq[i] = 0;
 
     string line;
     cin.ignore(); // consume newline
@@ -44,18 +46,65 @@ void readQuery(int freq[26]) {
     string token;
     stringstream ss(line);
 
-    while (ss >> token) {
+    while (ss >> token)
+    {
         char c = token[0];
         freq[c - 'a']++;
     }
 }
 
-void processQuery(const map<string, bool>& dictionary) {
+vector<string> findValidCombinations(const map<string, bool> &dictionary, int freq[26])
+{
+    vector<string> result;
+
+    for (auto &entry : dictionary)
+    {
+        const string &word = entry.first;
+
+        int wordFreq[26] = {0};
+        for (char c : word)
+        {
+            wordFreq[c - 'a']++;
+        }
+
+        bool ok = true;
+        for (int i = 0; i < 26; i++)
+        {
+            if (wordFreq[i] > freq[i])
+            {
+                ok = false;
+                break;
+            }
+        }
+
+        if (ok)
+        {
+            result.push_back(word);
+        }
+    }
+
+    sort(result.begin(), result.end());
+    return result;
+}
+
+void processQuery(const map<string, bool> &dictionary)
+{
     int freq[26];
     readQuery(freq);
 
-    // placeholder output for now
-    cout << 0 << "\n";
+    vector<string> result = findValidCombinations(dictionary, freq);
+
+    if (result.empty())
+    {
+        cout << 0 << "\n";
+        return;
+    }
+
+    cout << result.size() << "\n";
+    for (string &w : result)
+    {
+        cout << w << "\n";
+    }
 }
 
 void runGame()
@@ -69,7 +118,8 @@ void runGame()
     int q;
     cin >> q;
 
-    for (int i = 0; i < q; i++) {
+    for (int i = 0; i < q; i++)
+    {
         processQuery(dictionary);
     }
 }
