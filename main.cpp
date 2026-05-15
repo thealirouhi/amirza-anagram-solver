@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -32,6 +33,31 @@ void loadDictionary(map<string, bool> &dictionary, int n)
     }
 }
 
+void readQuery(int freq[26]) {
+    for (int i = 0; i < 26; i++) freq[i] = 0;
+
+    string line;
+    cin.ignore(); // consume newline
+
+    getline(cin, line);
+
+    string token;
+    stringstream ss(line);
+
+    while (ss >> token) {
+        char c = token[0];
+        freq[c - 'a']++;
+    }
+}
+
+void processQuery(const map<string, bool>& dictionary) {
+    int freq[26];
+    readQuery(freq);
+
+    // placeholder output for now
+    cout << 0 << "\n";
+}
+
 void runGame()
 {
     int n;
@@ -39,6 +65,13 @@ void runGame()
 
     map<string, bool> dictionary;
     loadDictionary(dictionary, n);
+
+    int q;
+    cin >> q;
+
+    for (int i = 0; i < q; i++) {
+        processQuery(dictionary);
+    }
 }
 
 int main()
