@@ -24,7 +24,7 @@ void loadDictionary(Node* root, int n);
 void dfs(Node* node, int freq[26], string current, vector<string>& result);
 
 // handle one query
-void processQuery(Node* root);
+vector<string> processQuery(Node* root);
 
 // main driver
 void runGame();
@@ -134,7 +134,7 @@ vector<string> findValidCombinations(const map<string, bool> &dictionary, int fr
     return result;
 }
 
-void processQuery(Node* root)
+vector<string> processQuery(Node* root)
 {
     int freq[26];
     readQuery(freq);
@@ -143,17 +143,9 @@ void processQuery(Node* root)
 
     dfs(root, freq, "", result);
 
-    if (result.empty())
-    {
-        cout << 0 << "\n";
-        return;
-    }
-
     sort(result.begin(), result.end());
 
-    cout << result.size() << "\n";
-    for (auto &w : result)
-        cout << w << "\n";
+    return result;
 }
 
 void runGame()
@@ -167,9 +159,24 @@ void runGame()
     int q;
     cin >> q;
 
+    vector<vector<string>> allResults;
     for (int i = 0; i < q; i++)
     {
-        processQuery(root);
+        allResults.push_back(processQuery(root));
+    }
+
+    for (auto &res : allResults)
+    {
+        if (res.empty())
+        {
+            cout << 0 << "\n";
+        }
+        else
+        {
+            cout << res.size() << "\n";
+            for (auto &w : res)
+                cout << w << "\n";
+        }
     }
 }
 
