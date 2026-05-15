@@ -78,6 +78,26 @@ void insertWord(Node* root, const string& word)
     curr->isWord = true;
 }
 
+void dfs(Node* node, int freq[26], string current, vector<string>& result)
+{
+    if (node->isWord)
+    {
+        result.push_back(current);
+    }
+
+    for (int i = 0; i < 26; i++)
+    {
+        if (node->child[i] != nullptr && freq[i] > 0)
+        {
+            freq[i]--;  // choose
+
+            dfs(node->child[i], freq, current + char('a' + i), result);
+
+            freq[i]++;  // backtrack
+        }
+    }
+}
+
 vector<string> findValidCombinations(const map<string, bool> &dictionary, int freq[26])
 {
     vector<string> result;
