@@ -7,29 +7,37 @@
 
 using namespace std;
 
+struct Node {
+    Node* child[26];
+    bool isWord;
+
+    Node() {
+        isWord = false;
+        for (int i = 0; i < 26; i++)
+            child[i] = nullptr;
+    }
+};
+
 // loading dictionary
-void loadDictionary(map<string, bool> &dictionary, int n);
+void loadDictionary(Node* root, int n);
 
-// backtracking helper (to be redesigned later)
-bool goForward(const string &word, const map<string, bool> &dictionary);
-
-// find valid words for a query
-vector<string> findValidCombinations(const vector<char> &letters,
-                                     const map<string, bool> &dictionary);
+void dfs(Node* node, int freq[26], string current, vector<string>& result);
 
 // handle one query
-void processQuery(const map<string, bool> &dictionary);
+void processQuery(Node* root);
 
 // main driver
 void runGame();
 
-void loadDictionary(map<string, bool> &dictionary, int n)
+void insertWord(Node* root, const string& word);
+
+void loadDictionary(Node* root, int n)
 {
     for (int i = 0; i < n; i++)
     {
         string word;
         cin >> word;
-        dictionary[word] = true;
+        insertWord(root, word);
     }
 }
 
@@ -51,6 +59,23 @@ void readQuery(int freq[26])
         char c = token[0];
         freq[c - 'a']++;
     }
+}
+
+void insertWord(Node* root, const string& word)
+{
+    Node* curr = root;
+
+    for (char c : word)
+    {
+        int idx = c - 'a';
+
+        if (!curr->child[idx])
+            curr->child[idx] = new Node();
+
+        curr = curr->child[idx];
+    }
+
+    curr->isWord = true;
 }
 
 vector<string> findValidCombinations(const map<string, bool> &dictionary, int freq[26])
@@ -87,12 +112,14 @@ vector<string> findValidCombinations(const map<string, bool> &dictionary, int fr
     return result;
 }
 
-void processQuery(const map<string, bool> &dictionary)
+void processQuery(Node* root)
 {
     int freq[26];
     readQuery(freq);
 
-    vector<string> result = findValidCombinations(dictionary, freq);
+    vector<string> result;
+
+    dfs(root, freq, "", result); // next step to implement
 
     if (result.empty())
     {
@@ -100,8 +127,10 @@ void processQuery(const map<string, bool> &dictionary)
         return;
     }
 
+    sort(result.begin(), result.end());
+
     cout << result.size() << "\n";
-    for (string &w : result)
+    for (auto &w : result)
     {
         cout << w << "\n";
     }
@@ -112,15 +141,15 @@ void runGame()
     int n;
     cin >> n;
 
-    map<string, bool> dictionary;
-    loadDictionary(dictionary, n);
+    Node* root = new Node();
+    loadDictionary(root, n);
 
     int q;
     cin >> q;
 
     for (int i = 0; i < q; i++)
     {
-        processQuery(dictionary);
+        processQuery(root);
     }
 }
 
