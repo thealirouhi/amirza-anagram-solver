@@ -139,7 +139,7 @@ void processQuery(Node* root)
 
     vector<string> result;
 
-    dfs(root, freq, "", result); // next step to implement
+    dfs(root, freq, "", result);
 
     if (result.empty())
     {
@@ -151,9 +151,7 @@ void processQuery(Node* root)
 
     cout << result.size() << "\n";
     for (auto &w : result)
-    {
         cout << w << "\n";
-    }
 }
 
 void runGame()
